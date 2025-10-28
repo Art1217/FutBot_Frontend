@@ -1,10 +1,6 @@
 package com.example.futbot.ui.Screens
 
-import android.R.attr.value
-import android.media.Image
-import android.util.Log
-import android.widget.Space
-import android.widget.Toast
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -46,7 +41,7 @@ fun login(viewModel: Loginviewmodel = viewModel()){
 
     Column(horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,modifier = Modifier.fillMaxSize(). padding(15.dp)) {
-    val image_login = painterResource(id = R.drawable.login2)
+        val image_login = painterResource(id = R.drawable.login2)
         Image(
             painter =image_login,
             contentDescription = null,
