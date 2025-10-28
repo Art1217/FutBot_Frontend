@@ -1,6 +1,7 @@
 package com.example.futbot.ui.Screens
 
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,14 +34,15 @@ import androidx.compose.ui.unit.sp
 import com.example.futbot.R
 import com.example.futbot.ui.viewmodel.Loginviewmodel
 import androidx.lifecycle.viewmodel.compose.viewModel
-
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 
 
 @Composable
-fun login(viewModel: Loginviewmodel = viewModel()){
+fun login(navController: NavHostController, viewModel: Loginviewmodel = viewModel()){
 
     Column(horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,modifier = Modifier.fillMaxSize(). padding(15.dp)) {
+        verticalArrangement = Arrangement.Center,modifier = Modifier.fillMaxSize().background(Color.White). padding(20.dp)) {
         val image_login = painterResource(id = R.drawable.login2)
         Image(
             painter =image_login,
@@ -82,7 +84,10 @@ fun login(viewModel: Loginviewmodel = viewModel()){
         Button(
             onClick = {
                 viewModel.showErrors = true
-                if (!viewModel.validate()) return@Button
+                val isValid = viewModel.validate()
+                Log.d("DEBUG", "¿Es válido? $isValid")
+                if (!isValid) return@Button
+                navController.navigate("chat")
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -142,5 +147,6 @@ fun textFieldWithError(
 @Composable
 @Preview
 fun previewlogin(){
-    login()
+    val navController = rememberNavController()
+    login(navController)
 }

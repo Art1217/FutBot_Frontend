@@ -3,6 +3,7 @@ package com.example.futbot.ui.Screens
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,13 +25,15 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.futbot.R
 import com.example.futbot.ui.viewmodel.RegisterViewModel
-import kotlinx.coroutines.launch
+
 
 @Composable
-fun register(viewModel: RegisterViewModel = viewModel()) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally,modifier = Modifier.fillMaxSize(). padding(15.dp)) {
+fun register(navController: NavHostController, viewModel: RegisterViewModel = viewModel()) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally,modifier = Modifier.fillMaxSize().background(Color.White). padding(20.dp)) {
         val image_register = painterResource(id = R.drawable.login2)
         Image(
             painter =image_register,
@@ -38,7 +41,7 @@ fun register(viewModel: RegisterViewModel = viewModel()) {
             contentScale = ContentScale.FillHeight,
             modifier = Modifier.size(150.dp))
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(40.dp))
 
         textFieldWithError(
             value = viewModel.nombres,
@@ -76,7 +79,7 @@ fun register(viewModel: RegisterViewModel = viewModel()) {
             showError = viewModel.showErrors,
             visualTransformation = PasswordVisualTransformation())
 
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(70.dp))
 
         Button(
             onClick = {
@@ -97,5 +100,6 @@ fun register(viewModel: RegisterViewModel = viewModel()) {
 @Composable
 @Preview
 fun prevRegister(){
-    register()
+    val navController = rememberNavController()
+    register(navController)
 }

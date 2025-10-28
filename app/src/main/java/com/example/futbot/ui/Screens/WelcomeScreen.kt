@@ -1,6 +1,7 @@
 package com.example.futbot.ui.Screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,11 +22,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.futbot.R
 
 @Composable
-fun welcome() {
-    Column(horizontalAlignment = Alignment.CenterHorizontally,modifier = Modifier.fillMaxSize(). padding(15.dp)) {
+fun welcome(navController: NavHostController) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally,modifier = Modifier.fillMaxSize().background(Color.White). padding(20.dp)) {
         val image_welcome = painterResource(id = R.drawable.login2)
         Spacer(modifier = Modifier.height(50.dp))
         Image(
@@ -37,7 +40,7 @@ fun welcome() {
         Spacer(Modifier.padding(50.dp))
 
         Button(
-            onClick = {},
+            onClick = {navController.navigate("login")},
             modifier = Modifier.fillMaxWidth() .height(93.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF040A7E))
         ) {
@@ -47,16 +50,12 @@ fun welcome() {
         Spacer(modifier = Modifier.height(50.dp))
 
         Button(
-            onClick = {},
+            onClick = {navController.navigate("register")},
             modifier = Modifier.fillMaxWidth() .height(93.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4A90E2))
         ) {
             Text("Registrarse", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold )
         }
-
-
-
-
     }
 
 
@@ -66,5 +65,6 @@ fun welcome() {
 @Composable
 @Preview
 fun prevWelcome() {
-    welcome()
+    val navController = rememberNavController()
+    welcome(navController)
 }
