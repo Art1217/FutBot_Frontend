@@ -1,7 +1,6 @@
 package com.example.futbot.ui.Screens
 
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,15 +31,23 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.futbot.R
-import com.example.futbot.ui.viewmodel.Loginviewmodel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.futbot.R
+import com.example.futbot.ui.viewmodel.Loginviewmodel
 
 
 @Composable
 fun login(navController: NavHostController, viewModel: Loginviewmodel = viewModel()){
+
+    if (viewModel.loginExitoso) {
+        LaunchedEffect(Unit) {
+            navController.navigate("chat") {
+                popUpTo("login") { inclusive = true }
+            }
+        }
+    }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,modifier = Modifier.fillMaxSize().background(Color.White). padding(20.dp)) {
@@ -83,11 +91,7 @@ fun login(navController: NavHostController, viewModel: Loginviewmodel = viewMode
 
         Button(
             onClick = {
-                viewModel.showErrors = true
-                val isValid = viewModel.validate()
-                Log.d("DEBUG", "¿Es válido? $isValid")
-                if (!isValid) return@Button
-                navController.navigate("chat")
+                viewModel.loginUsuario()
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -99,6 +103,13 @@ fun login(navController: NavHostController, viewModel: Loginviewmodel = viewMode
             )
         ) {
             Text("Acceder", fontSize = 17.sp)
+        }
+        if (viewModel.cargando) {
+            Text("Iniciando sesión...", color = Color.Gray)
+        }
+
+        viewModel.mensajeError?.let {
+            Text(it, color = Color.Red)
         }
     }
 

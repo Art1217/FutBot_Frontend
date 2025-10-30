@@ -1,10 +1,7 @@
 package com.example.futbot.ui.Screens
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,6 +31,14 @@ import com.example.futbot.ui.viewmodel.RegisterViewModel
 
 @Composable
 fun register(navController: NavHostController, viewModel: RegisterViewModel = viewModel()) {
+    if (viewModel.registroExitoso) {
+        LaunchedEffect(Unit) {
+            navController.navigate("chat") {
+                popUpTo("register") { inclusive = true }
+            }
+        }
+    }
+
     Column(horizontalAlignment = Alignment.CenterHorizontally,modifier = Modifier.fillMaxSize().background(Color.White). padding(20.dp)) {
         val image_register = painterResource(id = R.drawable.login2)
         Image(
@@ -83,13 +89,23 @@ fun register(navController: NavHostController, viewModel: RegisterViewModel = vi
 
         Button(
             onClick = {
-                viewModel.showErrors = true
-                if (!viewModel.validar()) return@Button
+                viewModel.registrarUsuario()
                 },
             modifier = Modifier.fillMaxWidth() .height(50.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF040A7E))
         ) {
             Text("Registrarse", color = Color.White)
+        }
+        if (viewModel.cargando) {
+            Text("Registrando usuario...", color = Color.Gray)
+        }
+
+        viewModel.mensajeError?.let {
+            Text(it, color = Color.Red)
+        }
+
+        if (viewModel.registroExitoso) {
+            Text("Usuario registrado correctamente ", color = Color.Green)
         }
     }
 }
