@@ -30,6 +30,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -42,47 +43,56 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.futbot.R
+import com.example.futbot.data.model.ChatMessage
+import com.example.futbot.ui.viewmodel.ChatViewModel
+import com.example.futbot.ui.viewmodel.ChatViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.collections.reversed
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatScreen(navController: NavHostController) {
-    val messages = remember { mutableStateListOf<ChatMessage>() }
+fun ChatScreen(
+    navController: NavHostController,usuarioId: Int,
+    viewModel: ChatViewModel = viewModel(factory = ChatViewModelFactory(usuarioId))
+) {
+    val messages by viewModel.messages.collectAsState()
     var inputText by remember { mutableStateOf("") }
-    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
             TopAppBar(
                 modifier = Modifier.shadow(6.dp, shape = RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)),
-                colors = TopAppBarDefaults.topAppBarColors( containerColor = Color(0xFF4A90E2)
-                , titleContentColor = Color.White ),
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color(0xFF4A90E2),
+                    titleContentColor = Color.White
+                ),
                 title = {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
                             text = "FutBot",
                             style = MaterialTheme.typography.titleLarge,
                             color = Color.White
                         )
-
                         Spacer(modifier = Modifier.width(8.dp))
-
-                        val image_login = painterResource(id = R.drawable.carita2)
+                        val imageLogin = painterResource(id = R.drawable.carita2)
                         Image(
-                            painter =image_login,
+                            painter = imageLogin,
                             contentDescription = null,
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.size(45.dp))
-
+                            modifier = Modifier.size(45.dp)
+                        )
                     }
                 }
             )
@@ -113,11 +123,12 @@ fun ChatScreen(navController: NavHostController) {
                         keyboardActions = KeyboardActions(
                             onDone = {
                                 if (inputText.isNotBlank()) {
-                                    sendMessage(inputText, messages, coroutineScope)
+                                    viewModel.sendMessage(inputText)
                                     inputText = ""
                                 }
                             }
                         ),
+                        textStyle = TextStyle(color = Color.Black),
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.White,
                             unfocusedContainerColor = Color.White,
@@ -129,7 +140,7 @@ fun ChatScreen(navController: NavHostController) {
                     Button(
                         onClick = {
                             if (inputText.isNotBlank()) {
-                                sendMessage(inputText, messages, coroutineScope)
+                                viewModel.sendMessage(inputText)
                                 inputText = ""
                             }
                         },
@@ -140,7 +151,6 @@ fun ChatScreen(navController: NavHostController) {
                         ),
                         modifier = Modifier
                             .size(height = 48.dp, width = 90.dp)
-
                     ) {
                         Text("Enviar")
                     }
@@ -161,30 +171,6 @@ fun ChatScreen(navController: NavHostController) {
                 ChatBubble(message = msg)
             }
         }
-    }
-}
-
-// Simular respuesta del bot para probar
-private fun sendMessage(
-    text: String,
-    messages: MutableList<ChatMessage>,
-    coroutineScope: CoroutineScope
-) {
-    val userMessage = ChatMessage("Tú", text, true)
-    messages.add(userMessage)
-
-    coroutineScope.launch {
-        delay(800)
-        val botResponse = when {
-            text.contains("hola", ignoreCase = true) ->
-                "¡Hola!  Soy FutBot. ¿Quieres reservar una canchita hoy?"
-            text.contains("si", ignoreCase = true) ->
-                "Genial . Indícame el día y hora que deseas."
-            text.contains("gracias", ignoreCase = true) ->
-                "¡De nada! "
-            else -> "Aún estoy aprendiendo. Prueba escribiendo 'hola' o 'si'."
-        }
-        messages.add(ChatMessage("FutBot ", botResponse, false))
     }
 }
 
@@ -213,9 +199,3 @@ fun ChatBubble(message: ChatMessage) {
         }
     }
 }
-
-data class ChatMessage(
-    val sender: String,
-    val content: String,
-    val isUser: Boolean
-)

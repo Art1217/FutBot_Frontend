@@ -33,7 +33,7 @@ import com.example.futbot.ui.viewmodel.RegisterViewModel
 fun register(navController: NavHostController, viewModel: RegisterViewModel = viewModel()) {
     if (viewModel.registroExitoso) {
         LaunchedEffect(Unit) {
-            navController.navigate("chat") {
+            navController.navigate("login") {
                 popUpTo("register") { inclusive = true }
             }
         }

@@ -19,6 +19,10 @@ class Loginviewmodel : ViewModel() {
 
     var cargando by mutableStateOf(false)
     var loginExitoso by mutableStateOf(false)
+    var usuarioNombre by mutableStateOf("")
+        private set
+    var usuarioId by mutableStateOf<Int?>(null)
+        private set
     var mensajeError by mutableStateOf<String?>(null)
 
     private val repository = UsuarioRepository()
@@ -56,8 +60,10 @@ class Loginviewmodel : ViewModel() {
                 if (response.isSuccessful) {
                     val loginResponse = response.body()
                     if (loginResponse?.usuario != null) {
+                        usuarioId = loginResponse.usuario.usuarioId
+                        usuarioNombre = loginResponse.usuario.nombres
                         loginExitoso = true
-                        println("Login exitoso: ${loginResponse.usuario.nombres}")
+                        println("Login exitoso: ${usuarioNombre}, ID: ${usuarioId}")
                     } else {
                         mensajeError = loginResponse?.message ?: "Error desconocido"
                     }

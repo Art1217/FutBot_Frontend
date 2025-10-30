@@ -43,7 +43,8 @@ fun login(navController: NavHostController, viewModel: Loginviewmodel = viewMode
 
     if (viewModel.loginExitoso) {
         LaunchedEffect(Unit) {
-            navController.navigate("chat") {
+            val id = viewModel.usuarioId ?: 0
+            navController.navigate("chat/$id") {
                 popUpTo("login") { inclusive = true }
             }
         }
@@ -81,13 +82,7 @@ fun login(navController: NavHostController, viewModel: Loginviewmodel = viewMode
 
         Spacer(Modifier.padding(20.dp))
 
-        Image(
-            painter =image_gmail,
-            contentDescription = null,
-            contentScale = ContentScale.FillWidth,
-            modifier = Modifier.size(30.dp))
-
-        Spacer(Modifier.padding(30.dp))
+        Spacer(Modifier.padding(50.dp))
 
         Button(
             onClick = {

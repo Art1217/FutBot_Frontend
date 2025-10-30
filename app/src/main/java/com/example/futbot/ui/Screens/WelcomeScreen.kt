@@ -41,7 +41,7 @@ fun welcome(navController: NavHostController) {
 
         Button(
             onClick = {navController.navigate("login")},
-            modifier = Modifier.fillMaxWidth() .height(93.dp),
+            modifier = Modifier.fillMaxWidth() .height(80.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF040A7E))
         ) {
             Text("Iniciar sesión", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold )
@@ -51,7 +51,7 @@ fun welcome(navController: NavHostController) {
 
         Button(
             onClick = {navController.navigate("register")},
-            modifier = Modifier.fillMaxWidth() .height(93.dp),
+            modifier = Modifier.fillMaxWidth() .height(80.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4A90E2))
         ) {
             Text("Registrarse", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold )
