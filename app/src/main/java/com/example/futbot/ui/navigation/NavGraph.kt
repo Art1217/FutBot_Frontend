@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.futbot.ui.Screens.chat
+import com.example.futbot.ui.Screens.ChatScreen
 import com.example.futbot.ui.Screens.login
 import com.example.futbot.ui.Screens.register
 import com.example.futbot.ui.Screens.welcome
@@ -17,6 +17,6 @@ fun NavGraph() {
         composable("welcome") { welcome(navController) }
         composable("login") { login(navController)}
         composable("register"){ register(navController) }
-        composable("chat"){ chat(navController) }
+        composable("chat"){ ChatScreen(navController) }
     }
 }
